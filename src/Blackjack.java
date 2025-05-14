@@ -119,7 +119,7 @@ public class Blackjack {
     JPanel buttonPanel = new JPanel();
     JButton hitButton = new JButton("Hit");
     JButton stayButton = new JButton("Stay");
-    JButton shootButton = new JButton("Shoot Dealer"); // Added Shoot Dealer button
+    JButton shootButton = new JButton("Shoot Dealer"); // shoot dealer button 
 
     public Blackjack(){
         startGame();
@@ -139,8 +139,8 @@ public class Blackjack {
         stayButton.setFocusable(false);
         buttonPanel.add(stayButton);
 
-        shootButton.setFocusable(false); // Ensure the button isn't focused
-        buttonPanel.add(shootButton); // Add Shoot Dealer button to panel
+        shootButton.setFocusable(false); // Chat gpt said to do this part I dont really know 
+        buttonPanel.add(shootButton); 
         frame.add(buttonPanel,BorderLayout.SOUTH);
 
         hitButton.addActionListener(new ActionListener() {
