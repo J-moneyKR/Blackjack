@@ -55,7 +55,7 @@ public class Blackjack {
     int boardWidth = 600;
     int boardHeight = boardWidth;
 
-    int cardWidth = 110; //1:1.4 ratio 
+    int cardWidth = 110; //1:1.4 ratio
     int cardHeight = 154;
 
     JFrame frame = new JFrame("Blackjack");
@@ -63,7 +63,6 @@ public class Blackjack {
         @Override
         public void paintComponent(Graphics g){
             super.paintComponent(g);
-
 
             try{
                 //draw hidden card
@@ -94,14 +93,22 @@ public class Blackjack {
                     System.out.println("DEALER: " + dealerSum);
                     System.out.println("PLAYER: "+playerSum);
 
-                    String message = "TEST";
-
-                    //if statements to update message is WIN, LOSE, PUSH(DRAW or TIE) based on score
+                    String message;
+                    if (playerSum > 21) {
+                        message = "Busted";
+                    } else if (dealerSum > 21) {
+                        message = "Busting ";
+                    } else if (playerSum > dealerSum) {
+                        message = " Keep gambling";
+                    } else if (dealerSum > playerSum) {
+                        message = " Womp womp womp";
+                    } else {
+                        message = " I dont know if this is good or bad";
+                    }
 
                     g.setFont(new Font("Arial",Font.PLAIN,30));
                     g.setColor(Color.white);
                     g.drawString(message,220,250);
-
                 }
             }
             catch (Exception e){
@@ -112,6 +119,7 @@ public class Blackjack {
     JPanel buttonPanel = new JPanel();
     JButton hitButton = new JButton("Hit");
     JButton stayButton = new JButton("Stay");
+    JButton shootButton = new JButton("Shoot Dealer"); // Added Shoot Dealer button
 
     public Blackjack(){
         startGame();
@@ -130,6 +138,9 @@ public class Blackjack {
         buttonPanel.add(hitButton);
         stayButton.setFocusable(false);
         buttonPanel.add(stayButton);
+
+        shootButton.setFocusable(false); // Ensure the button isn't focused
+        buttonPanel.add(shootButton); // Add Shoot Dealer button to panel
         frame.add(buttonPanel,BorderLayout.SOUTH);
 
         hitButton.addActionListener(new ActionListener() {
@@ -138,16 +149,16 @@ public class Blackjack {
                 playerSum += card.getValue();
                 playerAceCount += card.isAce()? 1:0;
                 playerHand.add(card);
-                
+
                 // if the player hand value is over 21
                 // 1) they bust
                 // 2) if they have an ace, subtract 10
-                // check the above conditions and 
+                // check the above conditions and
                 // if they are above 21, the do hitButton.setEnabled(false)
                 if(reducePlayerAce() > 21){
                     hitButton.setEnabled(false);
                 }
-                
+
                 gamePanel.repaint();
             }
         });
@@ -166,6 +177,13 @@ public class Blackjack {
                 gamePanel.repaint();
             }
         });
+
+        shootButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                shootDealer();
+            }
+        });
+
         gamePanel.repaint();
     }
 
@@ -210,8 +228,6 @@ public class Blackjack {
         System.out.println(playerHand);
         System.out.println(playerSum);
         System.out.println(playerAceCount);
-
-
     }
 
     public void buildDeck(){
@@ -246,7 +262,6 @@ public class Blackjack {
         }*/
         System.out.println("AFTER SHUFFLE");
         System.out.println(deck);
-
     }
 
     public int reducePlayerAce(){
@@ -265,4 +280,19 @@ public class Blackjack {
         return dealerSum;
     }
 
+    //  ADDED SHOOT DEALER
+    public void shootDealer(){
+        stayButton.setEnabled(false);
+        hitButton.setEnabled(false);
+        String message = "VICTORY ROYALE";
+        repaintMessage(message);
+    }
+
+    public void repaintMessage(String message) {
+        Graphics g = gamePanel.getGraphics();
+        g.setFont(new Font("Arial", Font.PLAIN, 30));
+        g.setColor(Color.white);
+        g.drawString(message, 220, 250);
+        gamePanel.repaint();
+    }
 }
